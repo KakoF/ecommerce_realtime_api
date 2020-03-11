@@ -26,11 +26,27 @@ class ProductSchema extends Schema {
       table.foreign('image_id').references('id').inTable('images').onDelete('cascade')
       table.foreign('product_id').references('id').inTable('products').onDelete('cascade')
     })
+
+    //TABELAS PIVO SÃO SEMPRE MAPEADAS PELO O ORM LUCID, NÃO PRECISANDO DE MODEL DO MESMO
+    //OS NOMES SÃO SEMPRE POR ONDE ALFABETICA DOS MODELS RELACIONADOS C_P POR EXEMPLO
+    this.create('category_product', (table)=>{
+      table.increments()
+      table.integer('category_id').unsigned()
+      table.integer('product_id').unsigned()
+      table.timestamps()
+
+      table.foreign('category_id').references('id').inTable('categories').onDelete('cascade')
+      table.foreign('product_id').references('id').inTable('products').onDelete('cascade')
+    })
   }
 
   down () {
-    this.drop('products')
+    //COLOCA A ORDEM INVERSA PARA DROPAR, PORQUE FOI CRIADO POR ULTIMO E VAI SER EXCLUIDO PRIMEIRO
+    this.drop('category_product')
     this.drop('image_product')
+    this.drop('products')
+   
+    
   }
 }
 
